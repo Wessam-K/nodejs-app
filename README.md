@@ -79,12 +79,14 @@ docker login
 docker push repos/k8s 
 
 
- kubectl create deployment k8s-web-server --image=repos/k8s
+kubectl create deployment k8s-web-server --image=repos/k8s
 
 Troubleshoot steps 
 
 kubectl describe pod k8s-web-server-6b68cc85-7hxx8
-kubectl logs pod k8s-web-server-6b68cc85-7hxx8   
+kubectl logs pod k8s-web-server-6b68cc85-7hxx8  
+
+kubectl logs pod k8s-web-server-6b68cc85-q4g6t 
 
 
 ## Expose Service 
@@ -107,3 +109,21 @@ kubectl delete svc k8s-web-server
 kubectl expose deployment k8s-web-server --type=NodePort --port=3000 
 
 minikube service k8s-web-server 
+
+____________________________________________________________________________________________
+
+##Updating Application 
+
+Edit the Index.mjs file 
+
+#building the new image
+docker build . -t name/repo:tag
+docker push name/repo:tag 
+kubectl set image deploy k8s-web-server k8s-web-server=cadgetboy/k8s-web-server:1.2.0
+#kubectl set image deploy k8s-web-server k8s-web-server=cadgetboy/k8s-web-server:Tagneeded
+
+kubectl get pods 
+# pods start replacing  by Rolling Update Deployment 
+kubectl rollout status deployment/k8s-web-server
+# to view the rollout deployment 
+
