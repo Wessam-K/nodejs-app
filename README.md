@@ -127,3 +127,96 @@ kubectl get pods
 kubectl rollout status deployment/k8s-web-server
 # to view the rollout deployment 
 
+-----------------------------------------
+# Updating using Recreate startegy 
+#Deployment.yaml
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: recreate-deployment
+
+  labels:
+
+    apps: helloserver
+
+spec:
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: recreate-deployment
+
+  labels:
+
+    apps: helloserver
+
+spec:
+
+  replicas: 8
+
+  selector:
+
+   matchLabels: 
+
+      app: helloserver
+
+  strategy:
+
+    type : Recreate
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: helloserver
+
+    spec:  
+
+      containers:
+
+      - name : helloserver
+
+        image: cadgetboy/k8s-web-server
+
+        ports:
+
+        - containerPort: 3000
+
+--------------------------------------
+Service.yaml 
+
+apiVersion: v1
+
+kind : Service
+
+metadata:
+
+  name: recreate-service
+
+spec:
+
+  selector:
+
+    app: helloserver
+
+  ports:
+
+    - port: 80
+
+      targetPort : 3000
+
+  type: NodePort
+
+---------------------------------------
+
+kubectl apply -f .\Deployment.yaml
+
